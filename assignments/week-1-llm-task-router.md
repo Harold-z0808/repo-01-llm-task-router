@@ -6,6 +6,8 @@ Build a small CLI app that takes a natural-language user request, asks a real LL
 
 This assignment is not about writing a local keyword classifier. The router must use an actual LLM call for route decisions.
 
+Week 1 includes Lesson 1 and Lesson 2. Lesson 1 gives you the environment, OpenAI Responses API, and message-history basics. Lesson 2 shows the structured-output pattern you should adapt for this assignment.
+
 ## Learning Objectives
 
 By the end of this assignment, you should be able to:
@@ -41,12 +43,18 @@ This repo gives you a working foundation, but it intentionally does not implemen
 - `src/llm_client.py`: provides a basic provider abstraction and `chat(...)` helper.
 - `src/schemas.py`: defines `TaskType`, `RouteDecision`, and `ToolCall`.
 - `src/prompts.py`: provides the starter router prompt.
-- `src/router.py`: contains `parse_route_decision(...)` and the `route_task(...)` TODO.
+- `src/router.py`: contains `route_decision_schema(...)`, `parse_route_decision(...)`, and the `route_task(...)` TODO.
 - `src/main.py`: contains the CLI loop and route-handling skeleton.
 - `src/tools.py`: contains example local tools, `TOOLS`, and `call_tool(...)`.
 - `tests/`: verifies starter infrastructure and gives you a place to add assignment tests.
 
 Your main job is to replace the `route_task(...)` TODO with a real LLM structured-output implementation and then complete the CLI route branches.
+
+### Why `llm_client.py` and `router.py` Are Separate
+
+`src/llm_client.py` is the Lesson 1 helper for plain-text chat. It teaches provider selection, message history, and `response.output_text`. Use it when the app needs a normal assistant reply, such as the `chat` branch.
+
+`src/router.py` is where you apply Lesson 2. Routing needs a stricter data contract than normal chat, so `route_task(...)` should call the OpenAI Responses API with `text.format.type = "json_schema"` and validate the result as a `RouteDecision`.
 
 ## Setup
 
@@ -96,6 +104,7 @@ The function must:
 
 - Call the OpenAI Responses API through `client.responses.create(...)` or the project LLM client wrapper if you extend it cleanly.
 - Request JSON schema structured output.
+- Follow the Lesson 2 pattern: `text.format.type = "json_schema"`, `name = "route_decision"`, `schema = route_decision_schema()`, and `strict = True`.
 - Validate the LLM output as a `RouteDecision` Pydantic model.
 - Support at least these route types: `chat`, `summarize`, `translate`, and `tool_call`.
 - Include a confidence score and a short reason in the returned `RouteDecision`.
@@ -226,4 +235,3 @@ Before you consider the assignment complete, make sure:
 - At least one local tool can be executed through the CLI.
 - You tested the app manually with `LLM_PROVIDER=openai`.
 - `.env` stays local and is not shared.
-

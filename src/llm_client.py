@@ -1,4 +1,9 @@
-"""Lesson 1: provider abstraction and chat()."""
+"""Lesson 1: provider abstraction and plain-text chat().
+
+This module intentionally handles normal assistant text responses only.
+Lesson 2 structured output for routing belongs in src/router.py, where students
+can apply the notebook 02 JSON schema pattern directly.
+"""
 
 from typing import Protocol
 
@@ -34,7 +39,7 @@ class MockProvider:
 
 
 class OpenAIProvider:
-    """OpenAI chat provider."""
+    """OpenAI plain-text chat provider."""
 
     def __init__(self, settings: Settings):
         """Initialize an OpenAI provider from runtime settings."""
@@ -45,7 +50,11 @@ class OpenAIProvider:
         self._model = settings.model
 
     def chat(self, messages: list[Message]) -> str:
-        """Send chat messages to the OpenAI Responses API."""
+        """Send chat messages to the OpenAI Responses API.
+
+        This helper returns response.output_text for regular chat. It does not
+        request json_schema output; route_task does that separately for routing.
+        """
 
         response = self._client.responses.create(
             model=self._model,

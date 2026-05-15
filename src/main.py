@@ -54,7 +54,7 @@ def handle_routed_request(user_input: str, messages: list[Message]) -> str:
 def run_chatbot() -> None:
     """Start the task router CLI in the terminal."""
 
-    messages: list[Message] = [{"role": "system", "content": SYSTEM_PROMPT}]
+    messages: list[Message] = [{"role": "developer", "content": SYSTEM_PROMPT}]
     print("LLM Task Router CLI. Type 'exit' or 'quit' to stop.")
 
     while True:

@@ -1,8 +1,16 @@
 import pytest
 from pydantic import ValidationError
 
-from src.router import parse_route_decision
+from src.router import parse_route_decision, route_decision_schema
 from src.schemas import TaskType
+
+
+def test_route_decision_schema_disallows_extra_fields():
+    """route_decision_schema should match the strict schema pattern from notebook 02."""
+
+    schema = route_decision_schema()
+
+    assert schema["additionalProperties"] is False
 
 
 def test_parse_route_decision_accepts_valid_json():

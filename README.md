@@ -1,6 +1,6 @@
 # repo-01-llm-task-router
 
-Lesson repo for building a minimal LLM task router. Lesson 1 focuses on `.env` loading, provider abstraction, and a multi-turn CLI chatbot. Lesson 2 introduces Pydantic schemas, prompt templates, function calling tools, and task routing.
+Week 1 lesson repo for building a minimal LLM task router. Week 1 includes two lessons: Lesson 1 focuses on `.env` loading, provider abstraction, and a multi-turn CLI chatbot. Lesson 2 introduces Pydantic schemas, prompt templates, structured output, function calling tools, and task routing.
 
 ## Structure
 
@@ -103,6 +103,10 @@ Type `exit` or `quit` to stop.
 
 Build a real LLM-powered task router CLI. The core requirement is that `route_task` must use a real LLM structured-output call to classify user requests. It should not rely on local keyword rules or a mock router for the main app behavior.
 
+The intended implementation style follows `notebooks/02_structured_output_and_tools.ipynb`: call the OpenAI Responses API with `client.responses.create(...)`, request `text.format.type = "json_schema"`, set `strict = True`, and validate `response.output_text` with the Pydantic `RouteDecision` model.
+
+`src/llm_client.py` is the Lesson 1 plain-text chat helper. It is still useful for the normal `chat` branch in the CLI, but it does not request JSON schema output. The router implementation in `src/router.py` is where students should apply the Lesson 2 structured-output pattern directly.
+
 The repo starts with working infrastructure and clear TODOs:
 
 - `src/config.py` and `src/llm_client.py` provide environment loading and basic LLM chat calls.
@@ -152,7 +156,9 @@ Python (.venv: repo-01-llm-task-router)
 
 If `from dotenv import load_dotenv` fails, the notebook is using the wrong kernel. Switch to the kernel above and restart the notebook kernel.
 
-The first notebook walks through direct API calls, chat completion parameters, multi-turn message history, and the bridge from notebook code to `src/llm_client.py`.
+The first notebook walks through direct API calls, key Responses API parameters, multi-turn message history, and the bridge from notebook code to `src/llm_client.py`.
+
+The second notebook is the main reference for the assignment implementation. It shows the progression from prompt-only JSON, to JSON mode, to strict JSON schema structured output with Pydantic validation, then previews local tool execution.
 
 ## Troubleshooting
 
@@ -174,5 +180,5 @@ For normal OpenAI usage, delete that line or comment it out. If you are using an
 
 - First debug step: verify the API key is loaded from `.env`.
 - `messages` is the model input. If history is missing, the model has no memory.
-- `finish_reason` and `usage` are required debugging signals.
+- `status`, `incomplete_details`, and `usage` are important Responses API debugging signals.
 - Tests should not call real paid APIs; use mocks or monkeypatching in tests only.

@@ -1,6 +1,6 @@
 """Lesson 2: prompt templates."""
 
-ROUTER_SYSTEM_PROMPT = """You classify user requests into one of:
+ROUTER_INSTRUCTIONS = """You classify user requests into one of:
 - chat
 - summarize
 - translate
@@ -8,6 +8,9 @@ ROUTER_SYSTEM_PROMPT = """You classify user requests into one of:
 
 Return only structured output matching the RouteDecision schema.
 """
+
+# Backwards-compatible name for students who have already read the starter code.
+ROUTER_SYSTEM_PROMPT = ROUTER_INSTRUCTIONS
 
 
 def build_router_prompt(user_request: str) -> str:

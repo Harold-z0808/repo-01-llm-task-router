@@ -1,8 +1,32 @@
 import pytest
 from pydantic import ValidationError
 
-from src.router import parse_route_decision, route_decision_schema
+from src.router import parse_route_decision, route_decision_schema, route_task
 from src.schemas import TaskType
+
+
+class FakeResponses:
+    def __init__(self):
+        self.kwargs = None
+
+    def create(self, **kwargs):
+        self.kwargs = kwargs
+
+        class Response:
+            output_text = """
+            {
+              "task_type": "translate",
+              "confidence": 0.94,
+              "reason": "The user asks to translate text."
+            }
+            """
+
+        return Response()
+
+
+class FakeClient:
+    def __init__(self):
+        self.responses = FakeResponses()
 
 
 def test_route_decision_schema_disallows_extra_fields():
@@ -11,6 +35,21 @@ def test_route_decision_schema_disallows_extra_fields():
     schema = route_decision_schema()
 
     assert schema["additionalProperties"] is False
+
+
+def test_route_task_uses_strict_json_schema_response():
+    """route_task should follow the notebook 02 structured-output call shape."""
+
+    client = FakeClient()
+
+    decision = route_task("translate good morning into Chinese", client=client)
+
+    assert decision.task_type == TaskType.TRANSLATE
+    assert decision.confidence == 0.94
+    assert client.responses.kwargs["text"]["format"]["type"] == "json_schema"
+    assert client.responses.kwargs["text"]["format"]["name"] == "route_decision"
+    assert client.responses.kwargs["text"]["format"]["strict"] is True
+    assert client.responses.kwargs["temperature"] == 0.1
 
 
 def test_parse_route_decision_accepts_valid_json():
@@ -59,8 +98,3 @@ def test_parse_route_decision_rejects_invalid_confidence():
             }
             """
         )
-
-
-# Assignment TODO:
-# Add tests for route_task by monkeypatching or injecting a fake LLM response.
-# Tests should not call the real OpenAI API.

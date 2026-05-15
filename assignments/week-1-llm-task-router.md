@@ -33,8 +33,6 @@ git fetch upstream
 
 After that, follow **Setup** below on your machine.
 
-If the course repository publishes a **`solution`** branch, fetch from `upstream` (or `origin` if you did not add `upstream`) and `git checkout solution` to read a working reference. Implement the assignment on your own fork first, then compare.
-
 ## Starter Code Map
 
 This repo gives you a working foundation, but it intentionally does not implement the core router for you.

@@ -115,6 +115,17 @@ Read the full assignment here:
 
 [Week 1 Assignment: LLM-Powered Task Router](assignments/week-1-llm-task-router.md)
 
+### Reference `solution` branch (optional)
+
+After you try the assignment on `main`, you can compare with the instructor reference on branch **`solution`**:
+
+```bash
+git fetch origin
+git checkout solution
+```
+
+Switch back to the starter with `git checkout main`.
+
 ## Notebooks
 
 Register the repo `.venv` as a Jupyter kernel:

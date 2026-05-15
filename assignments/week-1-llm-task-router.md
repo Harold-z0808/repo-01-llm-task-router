@@ -17,6 +17,22 @@ By the end of this assignment, you should be able to:
 - Connect an LLM routing decision to a small CLI workflow.
 - Register and call a local Python tool from a router decision.
 
+## Recommended workflow
+
+Work from **your own copy** of this repository so you can push commits, experiment freely, and keep API keys out of any public history.
+
+1. On GitHub, **fork** the course repository to your account.
+2. **Clone your fork** locally (not the instructor copy, unless you only need read-only reference).
+3. Add a local `.env` from `.env.example` and **never commit** `.env` or real API keys.
+4. Optional: add the original course repo as `upstream` if you want to **pull updates** from the instructor later:
+
+```bash
+git remote add upstream <course-repo-git-url>
+git fetch upstream
+```
+
+After that, follow **Setup** below on your machine.
+
 ## Starter Code Map
 
 This repo gives you a working foundation, but it intentionally does not implement the core router for you.
